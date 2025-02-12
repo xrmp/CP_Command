@@ -6,6 +6,8 @@ public abstract class Command
 {
     public abstract void Invoke(Vector2 position);
 
+    public abstract void Undo();
+
 
     protected void LogPosition(Vector2 position)
     {

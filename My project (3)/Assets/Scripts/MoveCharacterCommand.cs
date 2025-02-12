@@ -5,6 +5,7 @@ using UnityEngine;
 public class MoveCharacterCommand : Command
 {
     private Transform _characterTransform;
+    private Vector2 _previousPosition;
 
     public MoveCharacterCommand(Transform characterTransform)
     {
@@ -17,12 +18,22 @@ public class MoveCharacterCommand : Command
     {
         if (_characterTransform != null)
         {
+            _previousPosition = _characterTransform.position;
             _characterTransform.position = position;
             LogPosition(position);
         }
         else
         {
             Debug.LogError("Character Transform is not assigned!");
+        }
+    }
+
+    public override void Undo()
+    {
+        if (_characterTransform != null)
+        {
+            _characterTransform.position = _previousPosition;
+            Debug.Log("MoveCharacterCommand undone: Character moved back.");
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpawnPrefabCommand : Command
 {
     private GameObject _prefab;
+    private GameObject _spawnedObject;
 
     public SpawnPrefabCommand(GameObject prefab)
     {
@@ -21,6 +22,15 @@ public class SpawnPrefabCommand : Command
         else
         {
             Debug.LogError("Prefab is not assigned!");
+        }
+
+    }
+    public override void Undo()
+    {
+        if (_spawnedObject != null)
+        {
+            GameObject.Destroy(_spawnedObject);
+            Debug.Log("SpawnPrefabCommand undone: Object Destroyed.");
         }
     }
 }
