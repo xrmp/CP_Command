@@ -10,7 +10,7 @@ public class CommandInvoker : MonoBehaviour
 
     private const int MaxCommandQueueSize = 10;
     private Queue<Command> _commandQueue = new Queue<Command>();
-    private Queue<Command> _rightClickCommandQueue = new Queue<Command>();
+    private Queue<(Command comand, Vector2 position)> _rightClickCommandQueue = new Queue<(Command, Vector2)>();
 
     private void Update()
     {
@@ -26,7 +26,7 @@ public class CommandInvoker : MonoBehaviour
         {
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             var spawnCommand = new SpawnPrefabCommand(_prefabToSpawn);
-            _rightClickCommandQueue.Enqueue(spawnCommand);
+            _rightClickCommandQueue.Enqueue((spawnCommand, mousePosition));
         }
 
         if (!Input.GetMouseButtonDown(2))
@@ -66,8 +66,8 @@ public class CommandInvoker : MonoBehaviour
     {
         while (_rightClickCommandQueue.Count > 0)
         {
-            var cmd = _rightClickCommandQueue.Dequeue();
-            cmd.Invoke(Vector2.zero);
+            var (cmd, position) = _rightClickCommandQueue.Dequeue();
+            cmd.Invoke(position);
             AddCommandToQueue(cmd);
         }
     }
